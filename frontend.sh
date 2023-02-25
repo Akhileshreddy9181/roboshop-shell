@@ -4,7 +4,7 @@ rm -f ${log_file}
 
 print_head()
 {
-  echo -e "\e[37m$1\e[0m"
+  echo -e "\e[34m$1\e[0m"
   }
 
 
@@ -33,6 +33,6 @@ print_head "ENabling and Restarting the nginx"
 systemctl enable nginx &>>${log_file}
 systemctl restart nginx &>>${log_file}
 
-print_head "\e[35mStatus of nginx service"
+print_head "Status of nginx service"
 systemctl status nginx &>>${log_file}
 
