@@ -36,7 +36,3 @@ systemctl restart nginx &>>${log_file}
 print_head "\e[35mStatus of nginx service"
 systemctl status nginx &>>${log_file}
 
-
-
-
-}
