@@ -4,7 +4,7 @@ rm -f ${log_file}
 
 print_head()
 {
-  echo -e "\e[35m$1\e[0m"
+  echo -e "\e[37m$1\e[0m"
   }
 
 
