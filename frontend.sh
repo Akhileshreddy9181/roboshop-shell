@@ -1,6 +1,6 @@
 #loading the common script
 source common.sh
-exit_status_cmd=$($?)
+exit_status_cmd=$?
 
 print_status(){
   if [ $1 -eq 0 ];then
@@ -15,7 +15,9 @@ print_status(){
 
 print_head "Installing nginx"
 yum install nginx -y &>>${log_file}
-print_status "$exit_status_cmd"
+tmp=${exit_status_cmd}
+echo tmp
+print_status "tmp"
 
 print_head "Removing nginx default web content"
 rm -rf /usr/share/nginx/html/* &>>${log_file}
