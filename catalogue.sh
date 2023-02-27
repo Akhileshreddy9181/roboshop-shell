@@ -10,7 +10,7 @@ print_status $?
 
 print_head "Adding user roboshop"
 useradd roboshop &>>${log_file}
-print_status $?
+#print_status $?
 
 print_head "Creating directory /app"
 mkdir /app &>>${log_file}
