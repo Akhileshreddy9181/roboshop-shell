@@ -4,8 +4,6 @@ source common.sh
 
 print_head "Installing nginx"
 yum install nginx -y &>>${log_file}
-#tmp=$exit_status_cmd
-#echo $tmp
 print_status $?
 
 print_head "Removing nginx default web content"
