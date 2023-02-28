@@ -1,7 +1,7 @@
 source common.sh
 
 print_head "Configure nodeJS repo"
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log_file}
 print_status $?
 
 
@@ -27,7 +27,7 @@ rm -rf /app/*
 print_status $?
 
 print_head "Downloading the User code"
-curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user.zip
+curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user.zip &>>${log_file}
 print_status $?
 cd /app
 
@@ -44,7 +44,7 @@ print_head "Copy SystemD user service file"
 cp ${code_dir}/configs/user.service /etc/systemd/system/user.service &>>${log_file}
 print_status $?
 
-print_head " Reloading the System Background"
+print_head "Reloading the System Background"
 systemctl daemon-reload &>>${log_file}
 print_status $?
 
