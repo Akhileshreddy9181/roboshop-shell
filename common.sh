@@ -56,8 +56,8 @@ nodejs(){
     fi
   print_status $?
 
-  print_head "Delete Old Content" &>>${log_file}
-  rm -rf /app/*
+  print_head "Delete Old Content"
+  rm -rf /app/* &>>${log_file}
   print_status $?
 
   print_head "Downloading the ${component} code"
@@ -66,9 +66,7 @@ nodejs(){
   cd /app
 
   print_head "Extracting the code"
-  if [ ! -d /tmp/${component}.zip ]; then
-    unzip /tmp/${component}.zip &>>${log_file}
-    fi
+  unzip /tmp/${component}.zip &>>${log_file}
   print_status $?
 
   print_head "Installing all the node libraries and dependencies"
