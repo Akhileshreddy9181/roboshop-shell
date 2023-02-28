@@ -32,6 +32,9 @@ print_status $?
 
 
 print_head "Setting Root Password for MySQL"
-mysql_secure_installation --set-root-pass RoboShop@1 &>>${log_file}
+echo show databases | mysql -uroot -p${my_sql_root_passwd}
+if [ $? -ne 0 ]; then
+   mysql_secure_installation --set-root-pass ${my_sql_root_passwd} &>>${log_file}
+   fi
 
 print_status $?
