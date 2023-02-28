@@ -16,7 +16,24 @@ print_status(){
   fi
 }
 
-NODEJS(){
+schema_setup(){
+
+if [ "${schema_type}" == "mongo" ]; then
+    print_head "Copy MongoDB repo file"
+    cp ${code_dir}/configs/mongodb.repo /etc/yum.repos.d/mongo.repo &>>${log_file}
+    print_status $?
+
+    print_head "Install MongoDB Shell"
+    yum install mongodb-org-shell -y &>>${log_file}
+    print_status $?
+
+    print_head "Load the Schema into MongoDB Database"
+    mongo --host 172.31.9.108 </app/schema/${component}.js &>>${log_file}
+    print_status $?
+  fi
+}
+
+nodejs(){
 
   print_head "Configure nodeJS repo"
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log_file}
@@ -72,16 +89,6 @@ NODEJS(){
   systemctl restart ${component} &>>${log_file}
   print_status $?
 
-  print_head "Copy MongoDB repo file"
-  cp ${code_dir}/configs/mongodb.repo /etc/yum.repos.d/mongo.repo &>>${log_file}
-  print_status $?
-
-  print_head "Install MongoDB Shell"
-  yum install mongodb-org-shell -y &>>${log_file}
-  print_status $?
-
-  print_head "Load the Schema into MongoDB Database"
-  mongo --host 172.31.9.108 </app/schema/${component}.js &>>${log_file}
-  print_status $?
+  schema_setup
 
 }
