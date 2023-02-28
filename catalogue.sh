@@ -16,7 +16,7 @@ if [ $? -ne 0 ];then
 print_status $?
 
 print_head "Creating directory /app"
-if [ $? -ne 0 ];then
+if [ ! -d  /app ];then
   mkdir /app &>>${log_file}
   fi
 print_status $?
