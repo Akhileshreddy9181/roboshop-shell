@@ -66,7 +66,9 @@ nodejs(){
   cd /app
 
   print_head "Extracting the code"
-  unzip /tmp/${component}.zip &>>${log_file}
+  if [ ! -d /tmp/${component}.zip ]; then
+    unzip /tmp/${component}.zip &>>${log_file}
+    fi
   print_status $?
 
   print_head "Installing all the node libraries and dependencies"
