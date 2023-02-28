@@ -1,4 +1,4 @@
-source sommon.sh
+source common.sh
 
 print_head "Configure nodeJS repo"
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash
