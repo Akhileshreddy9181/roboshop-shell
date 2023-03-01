@@ -28,9 +28,17 @@ if [ "${schema_type}" == "mongo" ]; then
     print_status $?
 
     print_head "Load the Schema into MongoDB Database"
-    mongo --host 172.31.9.108 </app/schema/${component}.js &>>${log_file}
+    mongo --host mysql-.devopsa.online </app/schema/${component}.js &>>${log_file}
     print_status $?
-  fi
+  elif [ "${schema_type}" == "mysql" ]; then
+    print_head "Installing MySQL CLient"
+    yum install mysql -y &>>${log_file}
+    print_status $?
+
+    print_head "Load Schema"
+    mysql -h mysql-.devopsa.online -uroot -p${mysql_root_passwd} < /app/schema/${component}.sql &>>${log_file}
+    print_status $?
+    fi
 }
 
 nodejs(){
@@ -43,32 +51,6 @@ nodejs(){
   yum install nodejs -y &>>${log_file}
   print_status $?
 
-  print_head "Adding user roboshop"
-  id roboshop &>>${log_file}
-  if [ $? -ne 0 ];then
-    useradd roboshop &>>${log_file}
-    fi
-  print_status $?
-
-  print_head "Creating directory /app"
-  if [ ! -d  /app ];then
-    mkdir /app &>>${log_file}
-    fi
-  print_status $?
-
-  print_head "Delete Old Content"
-  rm -rf /app/* &>>${log_file}
-  print_status $?
-
-  print_head "Downloading the ${component} code"
-  curl -L -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component} &>>${log_file}
-  print_status $?
-  cd /app
-
-  print_head "Extracting the code"
-  unzip /tmp/${component}.zip &>>${log_file}
-  print_status $?
-
   print_head "Installing all the node libraries and dependencies"
   npm install &>>${log_file}
   print_status $?
@@ -77,18 +59,73 @@ nodejs(){
   cp ${code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
   print_status $?
 
-  print_head " Reloading the System Background"
-  systemctl daemon-reload &>>${log_file}
-  print_status $?
-
-  print_head "Enabling the ${component} Service"
-  systemctl enable ${component} &>>${log_file}
-  print_status $?
-
-  print_head "Starting the ${component} Service"
-  systemctl restart ${component} &>>${log_file}
-  print_status $?
-
   schema_setup
 
+  systemd_setup
+
+}
+
+app_prereq_setup(){
+
+  print_head "Adding user roboshop"
+    id roboshop &>>${log_file}
+    if [ $? -ne 0 ];then
+      useradd roboshop &>>${log_file}
+      fi
+    print_status $?
+
+    print_head "Creating directory /app"
+    if [ ! -d  /app ];then
+      mkdir /app &>>${log_file}
+      fi
+    print_status $?
+
+    print_head "Delete Old Content"
+    rm -rf /app/* &>>${log_file}
+    print_status $?
+
+    print_head "Downloading the ${component} code"
+    curl -L -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component} &>>${log_file}
+    print_status $?
+    cd /app
+
+    print_head "Extracting the code"
+    unzip /tmp/${component}.zip &>>${log_file}
+    print_status $?
+
+}
+
+systemd_setup(){
+
+    print_head " Reloading the System Background"
+    systemctl daemon-reload &>>${log_file}
+    print_status $?
+
+    print_head "Enabling the ${component} Service"
+    systemctl enable ${component} &>>${log_file}
+    print_status $?
+
+    print_head "Starting the ${component} Service"
+    systemctl restart ${component} &>>${log_file}
+    print_status $?
+}
+
+java(){
+
+  print_head "Installing Maven"
+  yum install maven -y &>>${log_file}
+  print_status $?
+
+  #Calling function app_prereq_setup
+  app_prereq_setup
+
+  print_head "Maven Clean and download dependencies"
+  mvn clean package &>>${log_file}
+  mv target/${component}-1.0.jar ${component}.jar &>>${log_file}
+
+  #Schema Setup Function Calling
+  schema_setup
+
+  #SystemD setup function calling
+  systemd_setup
 }
