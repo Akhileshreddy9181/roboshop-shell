@@ -1,5 +1,7 @@
 source common.sh
 
+component="catalogue"
+
 print_head "Configure nodeJS repo"
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log_file}
 print_status $?
@@ -26,12 +28,12 @@ print_status $?
 rm -rf /app/*
 
 print_head "Downloading the catalogue code"
-curl -L -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip &>>${log_file}
+curl -L -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>${log_file}
 print_status $?
 cd /app
 
 print_head "Extracting the code"
-unzip /tmp/catalogue.zip &>>${log_file}
+unzip /tmp/${component}.zip &>>${log_file}
 print_status $?
 
 print_head "Installing all the node libraries and dependencies"
@@ -39,7 +41,7 @@ npm install &>>${log_file}
 print_status $?
 
 print_head "Copy SystemD catalogue service file"
-cp ${code_dir}/configs/catalogue.service /etc/systemd/system/catalogue.service &>>${log_file}
+cp ${code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
 print_status $?
 
 print_head " Reloading the System Background"
@@ -47,11 +49,11 @@ systemctl daemon-reload &>>${log_file}
 print_status $?
 
 print_head "Enabling the Catalogue Service"
-systemctl enable catalogue &>>${log_file}
+systemctl enable ${component} &>>${log_file}
 print_status $?
 
 print_head "Starting the Catalogue Service"
-systemctl restart catalogue &>>${log_file}
+systemctl restart ${component} &>>${log_file}
 print_status $?
 
 print_head "Copy MongoDB repo file"
@@ -63,5 +65,5 @@ yum install mongodb-org-shell -y &>>${log_file}
 print_status $?
 
 print_head "Load the Schema into MongoDB Database"
-mongo --host 172.31.9.108 </app/schema/catalogue.js &>>${log_file}
+mongo --host 172.31.9.108 </app/schema/${component}.js &>>${log_file}
 print_status $?
