@@ -8,4 +8,4 @@ if [ -z "${roboshop_passwd}" ]; then
     fi
 
 component="dispatch"
-golamg
+golang
