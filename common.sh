@@ -97,6 +97,12 @@ app_prereq_setup(){
 
 systemd_setup(){
 
+  print_head "Setup SystemD Service"
+   cp {$code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
+   print_status $?
+
+   sed -i -e "s/ROBOSHOP_USER_PASSWORD/${roboshop_app_passwd}" /etc/systemd/system/${component}.service &>>${log_file}
+
     print_head " Reloading the System Background"
     systemctl daemon-reload &>>${log_file}
     print_status $?
@@ -128,4 +134,22 @@ java(){
 
   #SystemD setup function calling
   systemd_setup
+}
+
+python(){
+
+  print_head "Installing Python"
+  yum install python36 gcc python3-devel -y
+  print_status $?
+
+ #Calling function app_prereq_setup
+ app_prereq_setup
+
+ print_head "Install Python Dependencies"
+ pip3.6 install -r requirements.txt
+ print_status $?
+
+ #SystemD setup function calling
+   systemd_setup
+
 }

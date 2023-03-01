@@ -21,6 +21,7 @@ print_status $?
 
 print_head "Installing RabbitMQ Server"
 yum install rabbitmq-server -y &>>${log_file}
+print_status $?
 
 print_head "Enable RabbitMQ service"
 systemctl enable rabbitmq-server &>>${log_file}
