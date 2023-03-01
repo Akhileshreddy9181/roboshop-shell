@@ -139,14 +139,14 @@ java(){
 python(){
 
   print_head "Installing Python"
-  yum install python36 gcc python3-devel -y
+  yum install python36 gcc python3-devel -y &>>${log_file}
   print_status $?
 
  #Calling function app_prereq_setup
  app_prereq_setup
 
  print_head "Install Python Dependencies"
- pip3.6 install -r requirements.txt
+ pip3.6 install -r requirements.txt &>>${log_file}
  print_status $?
 
  #SystemD setup function calling
