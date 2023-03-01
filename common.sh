@@ -51,13 +51,12 @@ nodejs(){
   yum install nodejs -y &>>${log_file}
   print_status $?
 
+  app_prereq_setup
+
   print_head "Installing all the node libraries and dependencies"
   npm install &>>${log_file}
   print_status $?
 
-  print_head "Copy SystemD ${component} service file"
-  cp ${code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
-  print_status $?
 
   schema_setup
 
