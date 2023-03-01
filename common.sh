@@ -101,7 +101,12 @@ systemd_setup(){
    cp {$code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
    print_status $?
 
+ #setting password for payment service
    sed -i -e "s/ROBOSHOP_USER_PASSWORD/${roboshop_app_passwd}" /etc/systemd/system/${component}.service &>>${log_file}
+
+   #setting password for Dispatch Service
+   sed -i -e "s/ROBOSHOP_USER_PASSWD_DIS/${roboshop_app_passwd}" /etc/systemd/system/${component}.service &>>${log_file}
+
 
     print_head " Reloading the System Background"
     systemctl daemon-reload &>>${log_file}
@@ -152,4 +157,27 @@ python(){
  #SystemD setup function calling
    systemd_setup
 
+}
+
+golang(){
+
+ print_head "Installing Golang"
+ yum install golang -y &>>${log_file}
+print_status $?
+
+ #Calling function app_prereq_setup
+  app_prereq_setup
+
+  print_head "Installing Dependencies of Golang"
+  go mod init dispatch &>>${log_file}
+  go get &>>${log_file}
+  print_status $?
+
+  print_head "Building the Code "
+  go build &>>${log_file}
+  print_status $?
+
+
+  #SystemD setup function calling
+  systemd_setup
 }
