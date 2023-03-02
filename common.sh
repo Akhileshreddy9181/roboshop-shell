@@ -36,7 +36,7 @@ if [ "${schema_type}" == "mongo" ]; then
     print_status $?
 
     print_head "Load Schema"
-    mysql -h mysql-.devopsa.online -uroot -p${mysql_root_passwd} < /app/schema/${component}.sql &>>${log_file}
+    mysql -h mysql-.devopsa.online -uroot -p${mysql_root_passwd} < /app/schema/shipping.sql &>>${log_file}
     print_status $?
     fi
 }
