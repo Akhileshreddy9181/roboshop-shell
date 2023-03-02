@@ -101,10 +101,14 @@ systemd_setup(){
    print_status $?
 
  #setting password for payment service
+  if [ ${component} == "payment" ]; then
    sed -i -e "s/ROBOSHOP_USER_PASSWORD/${roboshop_app_passwd}" /etc/systemd/system/${component}.service &>>${log_file}
+   fi
 
    #setting password for Dispatch Service
+     if [ ${component} == "dispatch" ]; then
    sed -i -e "s/ROBOSHOP_USER_PASSWD_DIS/${roboshop_app_passwd}" /etc/systemd/system/${component}.service &>>${log_file}
+   fi
 
 
     print_head " Reloading the System Background"
