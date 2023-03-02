@@ -65,5 +65,5 @@ yum install mongodb-org-shell -y &>>${log_file}
 print_status $?
 
 print_head "Load the Schema into MongoDB Database"
-mongo --host 172.31.9.108 </app/schema/${component}.js &>>${log_file}
+mongo --host mongodb-.devopsa.online </app/schema/${component}.js &>>${log_file}
 print_status $?
