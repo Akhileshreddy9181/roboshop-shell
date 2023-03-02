@@ -28,7 +28,7 @@ if [ "${schema_type}" == "mongo" ]; then
     print_status $?
 
     print_head "Load the Schema into MongoDB Database"
-    mongo --host mysql-.devopsa.online </app/schema/${component}.js &>>${log_file}
+    mongo --host mongodb-.devopsa.online </app/schema/${component}.js &>>${log_file}
     print_status $?
   elif [ "${schema_type}" == "mysql" ]; then
     print_head "Installing MySQL CLient"
