@@ -132,6 +132,7 @@ java(){
   print_head "Maven Clean and download dependencies"
   mvn clean package &>>${log_file}
   mv target/${component}-1.0.jar ${component}.jar &>>${log_file}
+  print_status $?
 
   #Schema Setup Function Calling
   schema_setup
