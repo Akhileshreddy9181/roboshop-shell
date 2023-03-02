@@ -8,4 +8,4 @@ if [ -z "${mysql_root_passwd}" ]; then
     fi
 component=shipping
 schema_type="mysql"
-java "component"
+java
