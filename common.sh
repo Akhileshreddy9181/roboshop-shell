@@ -97,7 +97,7 @@ app_prereq_setup(){
 systemd_setup(){
 
   print_head "Setup SystemD Service"
-   cp {$code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
+   cp ${code_dir}/configs/${component}.service /etc/systemd/system/${component}.service &>>${log_file}
    print_status $?
 
  #setting password for payment service
